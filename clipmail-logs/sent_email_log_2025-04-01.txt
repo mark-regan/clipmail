@@ -1,0 +1,83 @@
+[2025-04-01T21:45:47.162262] Email sent to mark.regan@outlook.com
+/Users/mark/Developer/github/clipmail/
+
+[2025-04-01T22:00:15.876652] Email sent to mark.regan@outlook.com
+python3 "$SCRIPT_DIR/clipmail_raycast.py"
+
+[2025-04-01T22:00:32.550229] Email sent to mark.regan@outlook.com
+python3 "$SCRIPT_DIR/clipmail_raycast.py"
+
+[2025-04-01T22:00:58.851989] Email sent to mark.regan@outlook.com
+python3 "$SCRIPT_DIR/clipmail_raycast.py"
+
+[2025-04-01T22:01:16.773098] Email sent to mark.regan@outlook.com
+python3 "$SCRIPT_DIR/clipmail_raycast.py"
+
+[2025-04-01T22:01:21.075882] Email sent to mark.regan@outlook.com
+python3 "$SCRIPT_DIR/clipmail_raycast.py"
+
+[2025-04-01T22:02:09.818036] Email sent to mark.regan@outlook.com
+python3 "$SCRIPT_DIR/clipmail_raycast.py"
+
+[2025-04-01T22:02:11.335672] Email sent to mark.regan@outlook.com
+python3 "$SCRIPT_DIR/clipmail_raycast.py"
+
+[2025-04-01T22:02:28.865202] Email sent to mark.regan@outlook.com
+python3 "$SCRIPT_DIR/clipmail_raycast.py"
+
+[2025-04-01T22:02:30.897676] Email sent to mark.regan@outlook.com
+python3 "$SCRIPT_DIR/clipmail_raycast.py"
+
+[2025-04-01T22:05:09.456754] Email sent to mark.regan@outlook.com
+python3 "$SCRIPT_DIR/clipmail_raycast.py" 
+
+[2025-04-01T22:05:36.597245] Email sent to mark.regan@outlook.com
+python3 "$SCRIPT_DIR/clipmail_raycast.py" 
+
+
+[2025-04-01T22:05:49.931710] Email sent to mark.regan@outlook.com
+python3 "$SCRIPT_DIR/clipmail_raycast.py" 
+
+[2025-04-01T22:06:03.908239] Email sent to mark.regan@outlook.com
+python3 "$SCRIPT_DIR/clipmail_raycast.py" 
+
+
+[2025-04-01T22:06:28.175542] Email sent to mark.regan@outlook.com
+python3 "$SCRIPT_DIR/clipmail_raycast.py" 
+
+
+[2025-04-01T22:11:58.920845] Email sent to mark.regan@outlook.com
+./send-clipboard-to-email.sh
+
+
+[2025-04-01T22:12:11.325539] Email sent to mark.regan@outlook.com
+m stdin (length: 29)
+Debug: Text contains 1 newlines
+Debug: First line: ./send-clipboard-to-email.sh
+
+
+[2025-04-01T22:12:32.117454] Email sent to mark.regan@outlook.com
+m stdin (length: 29)Debug: Text contains 1 newlinesDebug: First line: ./send-clipboard-to-email.sh
+
+
+[2025-04-01T22:14:16.566239] Email sent to mark.regan@outlook.com
+#!/bin/bash# Get the directory where this script is locatedSCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"# Get clipboard content using AppleScriptCLIPBOARD_CONTENT=$(osascript -e
+
+[2025-04-01T22:14:26.234237] Email sent to mark.regan@outlook.com
+#!/bin/bash# Get the directory where this script is locatedSCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"# Get clipboard content using AppleScriptCLIPBOARD_CONTENT=$(osascript -e
+
+[2025-04-01T22:15:04.738254] Email sent to mark.regan@outlook.com
+#!/bin/bash# Get the directory where this script is locatedSCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"# Get clipboard content using AppleScriptCLIPBOARD_CONTENT=$(osascript -e
+
+[2025-04-01T22:15:16.880175] Email sent to mark.regan@outlook.com
+#!/bin/bash# Get the directory where this script is locatedSCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"# Get clipboard content using AppleScriptCLIPBOARD_CONTENT=$(osascript -e
+
+[2025-04-01T22:15:19.009802] Email sent to mark.regan@outlook.com
+#!/bin/bash# Get the directory where this script is locatedSCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"# Get clipboard content using AppleScriptCLIPBOARD_CONTENT=$(osascript -e
+
+[2025-04-01T22:19:21.836134] Email sent to mark.regan@outlook.com
+#!/bin/bash# Get the directory where this script is locatedSCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"# Get clipboard content using AppleScriptCLIPBOARD_CONTENT=$(osascript -e
+
+[2025-04-01T22:19:22.452383] Email sent to mark.regan@outlook.com
+#!/bin/bash# Get the directory where this script is locatedSCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"# Get clipboard content using AppleScriptCLIPBOARD_CONTENT=$(osascript -e
+
