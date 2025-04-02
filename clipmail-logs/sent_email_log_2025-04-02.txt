@@ -33,3 +33,6 @@ LICENSE
 [2025-04-02T12:16:25.642503] Email sent to mark.regan@outlook.com
 LICENSE
 
+[2025-04-02T12:16:48.376525] Email sent to mark.regan@outlook.com
+requirements.txt
+
