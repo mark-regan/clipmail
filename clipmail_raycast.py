@@ -13,6 +13,9 @@ from datetime import datetime
 from pathlib import Path
 from email.mime.text import MIMEText
 import time
+from email.mime.multipart import MIMEMultipart
+from email.mime.base import MIMEBase
+from email import encoders
 
 # These imports will fail on first run, but succeed after restart with venv
 google_imports_successful = False
@@ -65,21 +68,38 @@ def restart_with_venv():
             print("Error: Failed to import Google packages even after restarting with virtual environment")
             sys.exit(1)
 
-def get_clipboard_text():
-    """Get text from stdin (passed from shell script)"""
+def get_clipboard_content():
+    """Get clipboard content, handling both text and file paths"""
     try:
-        text = sys.stdin.read()
-        if text:
-            print(f"Debug: Got text from stdin (length: {len(text)})")
-            print(f"Debug: Text contains {text.count('\n')} newlines")
-            print(f"Debug: First line: {text.split('\n')[0]}")
-            return text
-        print("Debug: No text received from stdin")
+        # First try to get file path
+        file_path = subprocess.run(["pbpaste", "-Prefer", "file"], capture_output=True, text=True).stdout.strip()
+        
+        if file_path:
+            print(f"Debug: Found file path: {file_path}")
+            # Handle multiple files (newline-separated)
+            files = file_path.split('\n')
+            for file in files:
+                file = file.strip()
+                if file and os.path.exists(file):
+                    print(f"Debug: Valid file found: {file}")
+                    return "Hi Mark, here is the file that you have sent to ClipMail.", file
+                else:
+                    print(f"Debug: File not found or invalid: {file}")
+        
+        # If no file found, try to get text content
+        text_content = subprocess.run(["pbpaste", "-Prefer", "txt"], capture_output=True, text=True).stdout.strip()
+        
+        if text_content:
+            print(f"Debug: Found text content: {text_content[:100]}...")
+            return "Hi Mark, Below is the text that you sent to ClipMail.\n\n" + text_content, None
+                        
+        print("Debug: No valid content found in clipboard")
+        return None, None
     except Exception as e:
-        print(f"Debug: Error reading from stdin: {e}")
-    
-    print("Error: Could not get text from stdin")
-    return ""
+        print(f"Error getting clipboard content: {e}")
+        print("Full error details:")
+        traceback.print_exc()
+        return None, None
 
 def validate_config(config):
     """Validate the configuration"""
@@ -140,21 +160,62 @@ def authenticate_gmail(credentials_file, token_file):
         traceback.print_exc()
         raise
 
-def send_email(service, sender, recipients, subject, message_text):
+def send_email(recipients, message_text, attachment_path=None, config=None):
     """Send email using Gmail API"""
     try:
-        message = MIMEText(message_text)
-        message["to"] = recipients
-        message["from"] = sender
-        message["subject"] = subject
+        # Create Gmail API service using config credentials
+        service = authenticate_gmail(config["credentials_file"], config["token_file"])
         
-        raw_message = {"raw": base64.urlsafe_b64encode(message.as_bytes()).decode()}
-        service.users().messages().send(userId="me", body=raw_message).execute()
+        # Create email message
+        message = MIMEMultipart()
+        message["to"] = recipients
+        message["subject"] = "Clipboard Content"
+        message["from"] = "markaaregan@gmail.com"  # Using your email as sender
+        
+        # Add text content
+        text_part = MIMEText(message_text, "plain")
+        message.attach(text_part)
+        
+        # Add attachment if present
+        if attachment_path:
+            print(f"Debug: Attempting to attach file: {attachment_path}")
+            if not os.path.exists(attachment_path):
+                print(f"Error: Attachment file not found: {attachment_path}")
+                return False
+                
+            try:
+                with open(attachment_path, "rb") as f:
+                    attachment = MIMEBase("application", "octet-stream")
+                    attachment.set_payload(f.read())
+                    encoders.encode_base64(attachment)
+                    
+                    # Get filename from path
+                    filename = os.path.basename(attachment_path)
+                    attachment.add_header(
+                        "Content-Disposition",
+                        f"attachment; filename= {filename}",
+                    )
+                    message.attach(attachment)
+                print(f"Debug: Successfully attached file: {filename}")
+            except Exception as e:
+                print(f"Error attaching file: {e}")
+                return False
+        
+        # Encode message
+        raw_message = base64.urlsafe_b64encode(message.as_bytes()).decode("utf-8")
+        
+        # Send email
+        service.users().messages().send(userId="me", body={"raw": raw_message}).execute()
+        
+        # Log and commit to Git
+        log_and_git_commit(config["git_repo_path"], recipients, message_text)
+        
+        return True
     except Exception as e:
         print(f"Error sending email: {e}")
         print("Full error details:")
         traceback.print_exc()
-        raise
+        return False
 
 def log_and_git_commit(git_repo_path, recipients, message_text):
     """Log the sent email and commit to Git"""
@@ -203,6 +264,7 @@ def log_and_git_commit(git_repo_path, recipients, message_text):
         traceback.print_exc()
 
 def main():
+    """Main function to handle clipboard content and send email"""
     try:
         # Restart using virtual environment's Python if needed
         restart_with_venv()
@@ -222,7 +284,7 @@ def main():
             if not validate_config(config):
                 print("Invalid configuration. Please try again.")
                 return
-            
+                
             # Ensure config directory exists
             config_file.parent.mkdir(parents=True, exist_ok=True)
             with open(config_file, "w") as f:
@@ -236,35 +298,22 @@ def main():
                     return
 
         # Get clipboard content
-        text = get_clipboard_text()
-        if not text:
-            print("Clipboard is empty!")
+        message_text, attachment_path = get_clipboard_content()
+        
+        if not message_text and not attachment_path:
+            print("Error: Clipboard is empty!")
             return
-
+            
         # Send email
-        service = authenticate_gmail(config["credentials_file"], config["token_file"])
-        send_email(
-            service=service,
-            sender=config["recipient_emails"].split(",")[0],
-            recipients=config["recipient_emails"],
-            subject="ClipMail: Clipboard Content",
-            message_text=text
-        )
-        
-        # Log to Git
-        log_and_git_commit(
-            git_repo_path=config["git_repo_path"],
-            recipients=config["recipient_emails"],
-            message_text=text
-        )
-        
-        print("Success! Clipboard content sent and logged.")
-    
+        if send_email(config["recipient_emails"], message_text, attachment_path, config):
+            print("Email sent successfully!")
+        else:
+            print("Failed to send email!")
+            
     except Exception as e:
         print(f"Error: {e}")
         print("Full error details:")
         traceback.print_exc()
-        sys.exit(1)
 
 if __name__ == "__main__":
     main() 
