@@ -66,3 +66,9 @@ File Attached
 [2025-04-02T12:21:34.867521] Email sent to mark.regan@outlook.com
 Hi Mark, here is the file that you have sent to ClipMail.
 
+[2025-04-02T12:21:53.134375] Email sent to mark.regan@outlook.com
+Hi Mark, Below is the text that you sent to ClipMail.
+
+print(f"Warning: Git push failed: {e}")
+                print("Email was sent but changes were not pushed to remote.")
+
