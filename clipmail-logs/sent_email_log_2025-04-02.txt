@@ -63,3 +63,6 @@ File Attached
 [2025-04-02T12:19:52.677115] Email sent to mark.regan@outlook.com
 File Attached
 
+[2025-04-02T12:21:34.867521] Email sent to mark.regan@outlook.com
+Hi Mark, here is the file that you have sent to ClipMail.
+
