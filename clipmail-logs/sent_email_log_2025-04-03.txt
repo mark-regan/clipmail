@@ -1,0 +1,5 @@
+[2025-04-03T10:20:51.755059] Email sent to mark.regan@outlook.com
+Hi Mark, Below is the text that you sent to ClipMail.
+
+docker exec -it my_shlink shlink tag:list
+
